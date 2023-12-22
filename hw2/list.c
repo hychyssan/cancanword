@@ -4,13 +4,13 @@
 #include<stdlib.h>
 #include"list.h"
 
-static void CopyToNode(Item item, Node* pnode);
+static void CopyToNode(Item item, Node* pnode);			//将一个item类型元素拷贝到一个链表节点里
 
-void InitializeList(List* plist) {
+void InitializeList(List* plist) {			//初始化链表
 	plist = NULL;
 }
 
-bool ListIsEmpty(const List* plist) {
+bool ListIsEmpty(const List* plist) {		//判断链表是否为空
 	if (*plist == NULL) {
 		return true;
 	}
@@ -19,7 +19,7 @@ bool ListIsEmpty(const List* plist) {
 	}
 }
 
-bool ListIsFull(const List* plist) {		//what mean of it?
+bool ListIsFull(const List* plist) {		//判断链表是否为满
 	Node* pt;
 	bool full;
 
@@ -35,7 +35,7 @@ bool ListIsFull(const List* plist) {		//what mean of it?
 	return full;
 }
 
-unsigned int ListItemCount(const List* plist) {
+unsigned int ListItemCount(const List* plist) {			////统计链表元素个数
 	unsigned int count = 0;
 	Node* pnode = *plist;
 
@@ -47,7 +47,7 @@ unsigned int ListItemCount(const List* plist) {
 	return count;
 }
 
-bool AddItem(Item item, List* plist) {
+bool AddItem(Item item, List* plist) {			//给链表添加一个元素
 	Node* pnew;
 	Node* scan = *plist;
 	pnew = (Node*)malloc(sizeof(Node));
@@ -68,7 +68,7 @@ bool AddItem(Item item, List* plist) {
 	return true;
 }
 
-void Traverse(const List* plist, void(*pfun)(Item item))
+void Traverse(const List* plist, void(*pfun)(Item item))		//给链表每个元素执行一个函数
 {
 	if (*plist == NULL)		//+*
 		return;
@@ -102,7 +102,7 @@ void Traverse(const List* plist, void(*pfun)(Item item))
 	return;
 }
 
-void EmptyTheList(List* plist)
+void EmptyTheList(List* plist)		//清空链表
 {
 	Node* psave;
 
