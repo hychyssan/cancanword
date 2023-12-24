@@ -8,7 +8,7 @@
 static void CopyToNode(Item item, Node* pnode);
 
 void InitializeList(List* plist) {
-	plist->head = plist->end = NULL;				//what the fuck???
+	plist->head = plist->end = NULL;				
 }
 
 bool ListIsEmpty(const List* plist) {
@@ -20,7 +20,7 @@ bool ListIsEmpty(const List* plist) {
 	}
 }
 
-bool ListIsFull(const List* plist) {		//what mean of it?
+bool ListIsFull(const List* plist) {		
 	Node* pt;
 	bool full;
 

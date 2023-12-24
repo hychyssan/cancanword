@@ -1,6 +1,6 @@
 
 #define _CRT_SECURE_NO_WARNINGS
-#ifndef LIST_H_		//what meaning?
+#ifndef LIST_H_		
 #define LIST_H_
 #include<stdbool.h>
 
@@ -39,4 +39,4 @@ void Traverse(const List* plist, void(*pfun)(Item item));
 void EmptyTheList(List* plist);
 
 
-#endif			//what mean?
+#endif			
