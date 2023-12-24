@@ -1,17 +1,18 @@
 #define _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<stdlib.h>
 #include"list.h"
 
-static void CopyToNode(Item item, Node* pnode);			//将一个item类型元素拷贝到一个链表节点里
 
-void InitializeList(List* plist) {			//初始化链表
-	plist = NULL;
+
+static void CopyToNode(Item item, Node* pnode);
+
+void InitializeList(List* plist) {
+	plist->head = plist->end = NULL;				//what the fuck???
 }
 
-bool ListIsEmpty(const List* plist) {		//判断链表是否为空
-	if (*plist == NULL) {
+bool ListIsEmpty(const List* plist) {
+	if ((plist->head) == NULL) {
 		return true;
 	}
 	else {
@@ -19,7 +20,7 @@ bool ListIsEmpty(const List* plist) {		//判断链表是否为空
 	}
 }
 
-bool ListIsFull(const List* plist) {		//判断链表是否为满
+bool ListIsFull(const List* plist) {		//what mean of it?
 	Node* pt;
 	bool full;
 
@@ -35,9 +36,9 @@ bool ListIsFull(const List* plist) {		//判断链表是否为满
 	return full;
 }
 
-unsigned int ListItemCount(const List* plist) {			////统计链表元素个数
+unsigned int ListItemCount(const List* plist) {
 	unsigned int count = 0;
-	Node* pnode = *plist;
+	Node* pnode = plist->head;
 
 	while (pnode != NULL)
 	{
@@ -47,9 +48,9 @@ unsigned int ListItemCount(const List* plist) {			////统计链表元素个数
 	return count;
 }
 
-bool AddItem(Item item, List* plist) {			//给链表添加一个元素
+bool AddItem(Item item, List* plist) {
 	Node* pnew;
-	Node* scan = *plist;
+	Node* scan = plist->head;
 	pnew = (Node*)malloc(sizeof(Node));
 	if (pnew == NULL) {
 		return false;
@@ -57,7 +58,7 @@ bool AddItem(Item item, List* plist) {			//给链表添加一个元素
 	CopyToNode(item, pnew);
 	pnew->next = NULL;
 	if (scan == NULL) {
-		*plist = pnew;
+		plist->head = pnew;
 	}
 	else {
 		while (scan->next != NULL) {
@@ -68,52 +69,30 @@ bool AddItem(Item item, List* plist) {			//给链表添加一个元素
 	return true;
 }
 
-void Traverse(const List* plist, void(*pfun)(Item item))		//给链表每个元素执行一个函数
+void Traverse(const List* plist, void(*pfun)(Item item))
 {
-	if (*plist == NULL)		//+*
-		return;
-	Node* pnode = *plist;
-	Node* prev=*plist;
-	
-	while ((pnode ->next)!= NULL)
-	{
-		prev = pnode;
-		pnode = pnode->next;
-		
-	}
-	if (pnode->next == NULL||pnode!=NULL)
+	Node* pnode = plist->head;
+
+	while (pnode != NULL)
 	{
 		(*pfun)(pnode->item);
-		if (prev->next == pnode)
-		{
-			free(pnode);
-			pnode = NULL;
-			prev->next = NULL;
-		}
-		else
-		{
-			free(pnode);
-			pnode = NULL;
-			return;
-		}
-
-		Traverse(plist, pfun);
+		pnode = pnode->next;
 	}
-	return;
 }
 
-void EmptyTheList(List* plist)		//清空链表
+void EmptyTheList(List* plist)
 {
 	Node* psave;
 
-	while (*plist != NULL)
+	while (plist->head != NULL)
 	{
-		psave = (*plist)->next;
-		free(*plist);
-		*plist = psave;
+		psave = (plist->head)->next;
+		free(plist->head);
+		plist->head = psave;
 	}
 }
 
 void CopyToNode(Item item, Node* pnode) {
 	pnode->item = item;
 }
+
