@@ -13,5 +13,21 @@ CHIP RAM8 {
     OUT out[16];
 
     PARTS:
-    //// Replace this comment with your code.
+
+    //确定输入数据的存储位置（load若=0则全为0）
+    DMux8Way(in=load,sel=address,a=load1,b=load2,c=load3,d=load4,e=load5,f=load6,g=load7,h=load8);
+
+    //8个寄存器代表8个存储地址
+    Register(in=in,load=load1,out=oa);  //000
+    Register(in=in,load=load2,out=ob);  //001
+    Register(in=in,load=load3,out=oc);  //010
+    Register(in=in,load=load4,out=od);  //011
+    Register(in=in,load=load5,out=oe);  //100
+    Register(in=in,load=load6,out=of);  //101
+    Register(in=in,load=load7,out=og);  //110
+    Register(in=in,load=load8,out=oh);  //111
+
+    //输出存储的数据值
+    Mux8Way16(a=oa,b=ob,c=oc,d=od,e=oe,f=of,g=og,h=oh,sel=address,out=out);
+    
 }
