@@ -32,5 +32,45 @@ CHIP CPU {
         pc[15];          // Address of next instruction
 
     PARTS:
-    //// Replace this comment with your code.
+    // Put your code here:
+    /*
+        if(instruction[15] == 0) A-instruction --> loadinst = 0
+        else C-instruction loadinst = 1
+    */
+    And(a=true,b=instruction[15],out=loadinst); //判断是指令a(0)还是指令c(1)
+    Mux16(a=instruction,b=aluoutput,sel=loadinst,out=outmux1); 
+    
+    //C-inst: if(instruction[5] == 1) load A register;
+    //A-inst: always access A register 
+    
+    Mux(a=true,b=instruction[5],sel=loadinst,out=loadareg);     //open the A place or not
+    ARegister(in=outmux1,load=loadareg,out=outareg,out[0..14]=addressM);     //if instruction C,A==last output value, if instuction A, A==address of instruction A
+
+    Mux(a=false,b=instruction[4],sel=loadinst,out=loaddreg);    
+    DRegister(in=aluoutput,load=loaddreg,out=outdreg);  //if D=xxx,change value of D,else,D==last D.
+
+    Mux16(a=outareg,b=inM,sel=instruction[12],out=outmux2);     //if haven't M out==A, if have M out==M
+    ALU(x=outdreg,y=outmux2,zx=instruction[11],nx=instruction[10],
+    zy=instruction[9],ny=instruction[8],f=instruction[7],no=instruction[6],out=aluoutput,out=outM,zr=aluzr,ng=alung);
+
+    Mux(a=false, b=instruction[3], sel=loadinst, out=writeM);   //if writeM == 1,change the value of RAM[A]
+
+     
+      
+     //根据指令j位域和ALU的zr，ng位判断跳转
+   Or(a=alung, b=aluzr, out=ngorzr);
+    Not(in=ngorzr, out=alupo);
+    And(a=alung, b=instruction[2], out=cmp2); 
+    And(a=aluzr, b=instruction[1], out=cmp1);
+    And(a=alupo, b=instruction[0], out=cmp0);
+    Or(a=cmp0, b=cmp1, out=cmp01);
+    Or(a=cmp01, b=cmp2, out=cmp012);
+    /*
+    C-inst: ALU sign bits & the c-inst jjj bits not equals 0
+    A-inst: never jump
+    */
+    And(a=loadinst, b=cmp012, out=jmp);
+
+    PC(in=outareg, load=jmp, inc=true, reset=reset, out[0..14]=pc);
+
 }
